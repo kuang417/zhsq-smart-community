@@ -16,6 +16,10 @@ dist/
 *.pem
 *.p12
 *.pfx
+# 本地推送凭据（切勿入库）
+.github-token
+.github-token*
+*token*.txt
 
 # ---- 运行时数据 ----
 # server/data 下含明文演示数据（身份证/手机号/账号）、AES/JWT 密钥、
