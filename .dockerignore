@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.workbuddy
+server/data/*.db
+server/data/*.db-wal
+server/data/*.db-shm
+server/data/backups
+server/data/keys
+server/data/db.json
+server/data/bulk.json
+*.log
+.env
+.env.production

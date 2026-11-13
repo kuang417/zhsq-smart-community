@@ -1,0 +1,41 @@
+services:
+  zhsq:
+    build: .
+    image: zhsq-smart-community:2.6.0
+    container_name: zhsq-platform
+    restart: unless-stopped
+    # 只监听回环：外部流量必须经 Nginx 终止 TLS 并带上安全头，禁止直连明文 8081
+    ports:
+      - "127.0.0.1:8081:8081"
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      NODE_ENV: production
+      PORT: "8081"
+      # 三个密钥必须注入且长期保持不变；更换 DATA_KEY / INDEX_KEY 需重建并重新加密数据
+      ZHSQ_JWT_SECRET: ${ZHSQ_JWT_SECRET:?必须在 .env 中设置 ZHSQ_JWT_SECRET}
+      ZHSQ_DATA_KEY: ${ZHSQ_DATA_KEY:?必须在 .env 中设置 ZHSQ_DATA_KEY}
+      ZHSQ_INDEX_KEY: ${ZHSQ_INDEX_KEY:?必须在 .env 中设置 ZHSQ_INDEX_KEY}
+      # 首次初始化空业务库时创建的管理员密码（至少 12 位）
+      ZHSQ_ADMIN_PASSWORD: ${ZHSQ_ADMIN_PASSWORD:?必须在 .env 中设置 ZHSQ_ADMIN_PASSWORD}
+      ZHSQ_TRUST_PROXY: "1"
+      ZHSQ_CORS_ORIGINS: ${ZHSQ_CORS_ORIGINS:-https://your-domain.example.com}
+      ZHSQ_RATE_GLOBAL: ${ZHSQ_RATE_GLOBAL:-1200}
+      ZHSQ_RATE_LOGIN: ${ZHSQ_RATE_LOGIN:-10}
+      ZHSQ_RATE_RESIDENT: ${ZHSQ_RATE_RESIDENT:-120}
+      ZHSQ_RATE_SENSITIVE: ${ZHSQ_RATE_SENSITIVE:-8}
+      ZHSQ_EXPORT_MAX_ROWS: ${ZHSQ_EXPORT_MAX_ROWS:-50000}
+      ZHSQ_DB_FILE: /app/data/zhsq.db
+    volumes:
+      - zhsq-data:/app/data
+      - zhsq-backups:/app/server/data/backups
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8081/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  zhsq-data:
+  zhsq-backups:

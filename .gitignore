@@ -1,0 +1,50 @@
+# ---- 依赖 ----
+node_modules/
+.pnpm-store/
+.npm/
+
+# ---- 构建产物 ----
+dist/
+.vite/
+*.local
+
+# ---- 环境变量 / 密钥（绝不入库）----
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+
+# ---- 运行时数据 ----
+# server/data 下含明文演示数据（身份证/手机号/账号）、AES/JWT 密钥、
+# SQLite 主库与 WAL、离线底图导入结果、备份；全部只保留在本地。
+server/data/*
+!server/data/.gitkeep
+server/uploads/*
+!server/uploads/.gitkeep
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# ---- 大体积离线数据 / 临时文件 ----
+*.gpkg
+*.gpkg.zip
+*.zip
+*.7z
+*.tmp
+*.bak
+*.log
+logs/
+coverage/
+
+# ---- 工作区本地记忆（非项目源码）----
+.workbuddy/
+
+# ---- 操作系统 ----
+.DS_Store
+Thumbs.db
+desktop.ini

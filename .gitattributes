@@ -1,0 +1,13 @@
+# 统一仓库内行尾为 LF：deploy/*.sh 需在 Linux 容器内可执行
+* text=auto eol=lf
+
+# 二进制资源不做行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.db binary
+*.gpkg binary
